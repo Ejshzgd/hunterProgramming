@@ -8,7 +8,6 @@ Description: Reads two integers from the user and prints the smaller value.
 */
 
 #include <iostream>
-#include <string>
 
 using namespace std;
 
