@@ -13,7 +13,7 @@ using namespace std;
 
 int main(){
 
-    // Read three integers from the user
+    // Reads three integers from the user
     int a,b,c,d;
 
     cout << "Enter the first number: ";
