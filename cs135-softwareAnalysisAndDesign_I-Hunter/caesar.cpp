@@ -18,46 +18,29 @@ using namespace std;
 //--- Function prototype ---
 char shiftUpperChar(char c, int rshift);
 char shiftLowerChar(char c, int rshift);
+char shiftChar(char c, int rshift);
+string encryptCaesar(string plaintext, int rshift);
 
 
 int main(){
 
-    string plainText, cipherText;
+    string plainPhrase;
     int shift;
 
     cout << "Plaintext: ";
-    getline(cin, plainText);
+    getline(cin, plainPhrase);
     cout << "Enter shift: ";
     cin >> shift;
 
 
-    int plainTextLeng = plainText.length();
-    for(int i = 0; i < plainTextLeng; i++)
-    {
-        char letter = plainText[i];
-        if(letter >= 65 && letter <= 90)
-        {
-            cipherText += shiftUpperChar(letter, shift);
-        }
-        else if(letter >= 97 && letter <= 122)
-        {
-            cipherText += shiftLowerChar(letter, shift);
-        }
-        else
-        {
-            cipherText += letter;
-        }
-    }
-
-
-    cout << "Ciphertext: " << cipherText;
+    cout << "Ciphertext: " << encryptCaesar(plainPhrase,shift);
 
     return 0;
 }
 
 
 
-//A-Z (65-90) , a-z (97,122)
+//A-Z (65-90)
 // A helper function to shift one character by rshift for uppercase letters
 char shiftUpperChar(char c, int rshift){
     if(c + rshift > 90)
@@ -69,6 +52,7 @@ char shiftUpperChar(char c, int rshift){
 }
 
 
+//a-z (97,122)
 // A helper function to shift one character by rshift for lowercase letters
 char shiftLowerChar(char c, int rshift){
     if(c + rshift > 122)
@@ -78,3 +62,35 @@ char shiftLowerChar(char c, int rshift){
     return (c+rshift);
 }
 
+
+// Returns the shifted character 
+char shiftChar(char c, int rshift)
+{
+    if(c >= 65 && c <= 90)
+    {
+        return shiftUpperChar(c, rshift);
+    }
+    
+    if(c >= 97 && c <= 122)
+    {
+        return shiftLowerChar(c, rshift);
+    }
+
+    return c;
+}
+
+
+// Returns the message encrypted in Caesar
+string encryptCaesar(string plaintext, int rshift)
+{
+    string cipherText;
+    int plainTextLeng = plaintext.length();
+
+    for(int i = 0; i < plainTextLeng; i++)
+    {
+        char letter = plaintext[i];
+        cipherText += shiftChar(letter,rshift);
+    }
+
+    return cipherText;
+}
