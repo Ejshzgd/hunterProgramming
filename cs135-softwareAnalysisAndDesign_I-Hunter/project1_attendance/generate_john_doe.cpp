@@ -44,7 +44,7 @@ int main(){
     
     outFile.close();
 
-    cout << "Data written to log.txt successfully." << std::endl;
+    cout << "Data written to log.txt successfully." << endl;
 
 
     return 0;
