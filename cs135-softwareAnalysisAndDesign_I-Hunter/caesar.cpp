@@ -4,7 +4,7 @@ Copyright (c) 2026 Carey Jiang
 Author:      Carey Jiang
 Created:     2026-2-09
 Updated:     2026-2-09
-Description: Implement Caesar cipher, replace each letter in the plaintext with a letter some fixed number of positions down the alphabet
+Description: Implements Caesar cipher, replace each letter in the plaintext with a letter some fixed number of positions down the alphabet
                     -Alphabet wraps around
                     -Preserve case
                     -Leave any non-alphabetic characters unchanged
@@ -64,8 +64,7 @@ char shiftLowerChar(char c, int rshift){
 
 
 // Returns the shifted character 
-char shiftChar(char c, int rshift)
-{
+char shiftChar(char c, int rshift){
     if(c >= 65 && c <= 90)
     {
         return shiftUpperChar(c, rshift);
@@ -81,8 +80,7 @@ char shiftChar(char c, int rshift)
 
 
 // Returns the message encrypted in Caesar
-string encryptCaesar(string plaintext, int rshift)
-{
+string encryptCaesar(string plaintext, int rshift){
     string cipherText;
     int plainTextLeng = plaintext.length();
 
