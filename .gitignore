@@ -1,0 +1,65 @@
+# ---- System Files ----
+.DS_Store
+Thumbs.db
+
+# ---- C++ Build Artifacts ----
+# Object files
+*.o
+*.obj
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Compiled libraries
+*.lib
+*.a
+*.so
+*.dll
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
+build/
+bin/
+Debug/
+Release/
+
+# ---- Python Artifacts ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.env
+
+# ---- VSCode ----
+.vscode/
+*.code-workspace
+
+# ---- Other Editors / IDEs ----
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ---- Logs / Runtime ----
+*.log
+*.tmp
+*.cache
+
+# ---- Coverage / Test output ----
+coverage/
+.coverage
+htmlcov/
+
+# ---- Temporary / Swap Files ----H
+*~
+*.swp
+*.swo
