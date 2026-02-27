@@ -39,7 +39,6 @@ int main(){
     }
     
 
-
     outFile << johnDoeFile;
     
     outFile.close();
