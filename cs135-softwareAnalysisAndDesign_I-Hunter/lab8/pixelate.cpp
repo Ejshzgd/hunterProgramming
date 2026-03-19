@@ -2,11 +2,12 @@
 Copyright (c) 2026 Carey Jiang
 
 Author:      Carey Jiang
-Created:     2026-3-05
-Updated:     2026-3-05
+Created:     2026-3-16
+Updated:     2026-3-16
 Description: The program reads a PGM image from the file "inImage.pgm",
                 -Outputs a modified image to "outImage.pgm"
-                -Scales the original picture to 200% of its size
+                -For every 2x2 non-overlapping window:
+                    -Set value to the averaged over all the pixels in that window of the input
 */
 
 
@@ -99,19 +100,21 @@ int main() {
 	// for example we copy its contents into a new array
 	int out[MAX_H][MAX_W];
 
-	for(int row = 0; row < h; row++) {
-		for(int col = 0; col < w; col++) {
+	for(int row = 0; row < h; row+=2) {
+		for(int col = 0; col < w; col+=2) {
             int val = img[row][col];
+            int average = (img[row][col] + img[row+1][col] + img[row][col+1] + img[row+1][col+1] + 2)/4;
 
-            out[2*row][2*col] = val;
-            out[2*row+1][2*col] = val;
-            out[2*row][2*col+1] = val;
-            out[2*row+1][2*col+1] = val; 
+            out[row][col] = average;
+            out[row+1][col] = average;
+            out[row][col+1] = average;
+            out[row+1][col+1] = average;  
+
 		}
 	}
 
 
 	// and save this new image to file "outImage.pgm"
-	writeImage(out, h*2, w*2);
+	writeImage(out, h, w);
 
 }

@@ -2,11 +2,14 @@
 Copyright (c) 2026 Carey Jiang
 
 Author:      Carey Jiang
-Created:     2026-3-05
-Updated:     2026-3-05
+Created:     2026-3-16
+Updated:     2026-3-16
 Description: The program reads a PGM image from the file "inImage.pgm",
                 -Outputs a modified image to "outImage.pgm"
-                -Scales the original picture to 200% of its size
+                -Implement a horizontal edge detection operation
+                    -Use function: f(a,b,c,d,e,f,g,h,i) = (g+2h+i)-(a+2b+c)
+                    -If the resulting color is less than 0 or greater than 255, make them 0 and 255 respectively
+                    -Assume borders without top and bottom to be 0
 */
 
 
@@ -102,16 +105,17 @@ int main() {
 	for(int row = 0; row < h; row++) {
 		for(int col = 0; col < w; col++) {
             int val = img[row][col];
+            int top = (row > 0) ? img[row-1][col-1] + 2 * (img[row-1][col]) + img[row-1][col+1] : 0;
+            int bottom = (col < w-1) ? img[row+1][col-1] + 2 * (img[row+1][col]) + img[row+1][col+1] : 0;
+            int result = ((bottom-top) < 255) ? (((bottom-top) > 0) ? result = (bottom-top) : result = 0) : result = 255;
 
-            out[2*row][2*col] = val;
-            out[2*row+1][2*col] = val;
-            out[2*row][2*col+1] = val;
-            out[2*row+1][2*col+1] = val; 
+            out[row][col] = result;
+
 		}
 	}
 
 
 	// and save this new image to file "outImage.pgm"
-	writeImage(out, h*2, w*2);
+	writeImage(out, h, w);
 
 }
