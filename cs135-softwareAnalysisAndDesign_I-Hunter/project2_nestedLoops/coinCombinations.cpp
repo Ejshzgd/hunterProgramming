@@ -4,7 +4,12 @@ Copyright (c) 2026 Carey Jiang
 Author:      Carey Jiang
 Created:     2026-3-21
 Updated:     2026-3-21
-Description: 
+Description: Prompt the user to enter: 
+                -an amount in dollars (as a decimal, e.g., 0.25)
+                -the maximum number of cents (pennies) allowed in any combination
+              Print all possible combinations of:
+                -quarters (25¢), dimes (10¢), nickels (5¢), and cents (1¢) that sum to the specified amount
+              Each valid combination must not exceed the user-defined maximum number of pennies 
 
 */
 
@@ -26,32 +31,20 @@ int main(){
 
 
     int maxQuarters = ceil(amount/0.25);
-    if(maxQuarters > maxCents)
-    {
-        maxQuarters = maxCents;
-    }
 
     int maxDimes = ceil(amount/0.10);
-    if(maxDimes > maxCents)
-    {
-        maxDimes = maxCents;
-    }
 
     int maxNickels = ceil(amount/0.05);
-    if(maxNickels > maxCents)
-    {
-        maxNickels = maxCents;
-    }
     
     int maxPennies = maxCents;
 
-    int maxCombination = maxPennies*1 + maxNickels*10 + maxDimes*100 + maxQuarters*1000;
+    int maxCombination[] = {maxPennies,  maxNickels , maxDimes , maxQuarters};
     int counter = 1;
 
 
     cout << "   quarters" << "   dimes" << "   nickels" << "   cents" << endl;
 
-    if((maxCents == 0 && amount > 0.0) || (maxCents*0.25 + maxCents*0.10 + maxCents*0.05 + maxCents*0.01 < amount))
+    if((amount == 0.0) || (maxQuarters*0.25 + maxDimes*0.10 + maxNickels*0.05 + maxCents*0.01 < amount))
     {
         cout << "no solution";
         return 0;
@@ -73,13 +66,13 @@ int main(){
                     }
                     maxPennies--;
                 }
-                maxPennies = (maxCombination) % 10;
+                maxPennies = maxCombination[0];
                 maxNickels--;
             }
-            maxNickels = (maxCombination / 10) % 10;
+            maxNickels = maxCombination[1];
             maxDimes--;
         }
-        maxDimes = (maxCombination / 100) % 10;
+        maxDimes = maxCombination[2];
         maxQuarters--;
     }
 
