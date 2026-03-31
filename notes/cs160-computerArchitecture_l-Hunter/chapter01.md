@@ -33,6 +33,8 @@ Ex: 101 -> 1 x 2<sup>2</sup> + 0 x 2<sup>1</sup> + 1 x 2<sup>0</sup> (The result
 
 **Hexadecimal, Base-16 System:** The letters of the alphabet are used
 to supplement the 10 decimal digits when the base of the number is greater than 10.  
+- Able to represent a binary number with 2 digits
+
 | Coefficients | Hexadecimal Representation |
 |:-------------|:--------------------------:|
 |10            |A                           |
@@ -93,11 +95,25 @@ Ex:(0.234)<sub>10</sub> to Binary
 **(Stop until fraction part = 0 or continue to get a better approximation)** 
 # 1.4 Octal & Hexadecimal Numbers
 **Convert binary to octal:**   
-**First,** partition the binary into groups of 3 and pad leading 0s if needed from right to left  
+**First,** partition the binary into groups of 3 from right to left and pad leading 0s if needed  
 **Second,** convert each group to it's corresponding decimal value  
 **Third,** concatenate the decimals  
 
-Ex:
+Ex:(10 110 001 101 011 . 111 100 000 110)<sub>2</sub> = (26153.7406)<sub>8</sub>  
+
+**Convert binary to hexadecimal:**  
+**First,** partition the binary into groups of 4 from right to left and pad leading 0s if needed  
+**Second,** convert each group to it's corresponding hexadecimal value  
+**Third,** concatenate the decimals 
+
+Ex: (10 1100 0110 1011 . 1111 0010)<sub>2</sub> = (2C6B.F2)<sub>16</sub>
+
+**Convert octal / hexadecimal to binary:** For each digit, convert to it's corresponding binary value. It should be a multiple of 3 or 4.
+
+# 1.5 Complements of Numbers
+
+
+
 
 
  
