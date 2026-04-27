@@ -109,5 +109,10 @@ int sumArray(int *arr, int size){
 
 
 bool isAlphanumeric(string s){
-    
+    if(s.length() == 0)
+    {
+        return true;
+    }
+
+    if(s[])
 }
