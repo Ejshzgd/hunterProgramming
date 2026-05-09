@@ -11,60 +11,44 @@ Description: Define a function: vector<int> sumPairWise(const vector<int> &v1, c
 
 #include <iostream>
 #include <vector>
-#include <string>
-#include <cmath>
 
 using namespace std;
 
 //--- Function prototype ---
-vector<int> sumPairWise(const vector<int> &v1, const vector<int> &v2);
+vector<int> sumPairWise(vector<int>& v1, vector<int>& v2);
 
-int main(){
-
+int main() {
     vector<int> v1{1,2,3};
     vector<int> v2{4,5};
 
     vector<int> v3 = sumPairWise(v1, v2); // returns [5, 7, 3]
 
-    for(int v : v3)
-    {
+    for(int v : v3) {
         cout << v << ' ';
     }
 
+    cout << endl;
     return 0;
-
 }
 
-vector<int> sumPairWise(const vector<int> &v1, const vector<int> &v2){
+//--- Function implementation ---
+vector<int> sumPairWise(vector<int>& v1, vector<int>& v2) {
     vector<int> v3;
-    int sizeV1 = v1.size() , sizeV2 = v2.size();
-    int smallerSize = -1 ,  largerSize = -1;
-    (sizeV1 >= sizeV2) ? (smallerSize = sizeV2 , largerSize = sizeV1) 
-                       : (smallerSize = sizeV1 , largerSize = sizeV2);
+    int sizeV1 = v1.size();
+    int sizeV2 = v2.size();
+    int smallerSize = (sizeV1 < sizeV2) ? sizeV1 : sizeV2;
+    int largerSize = (sizeV1 > sizeV2) ? sizeV1 : sizeV2;
 
-    for(int i = 0; i < smallerSize; i++)
-    {
-        int sum = v1.at(i) + v2.at(i);
-        v3.push_back(sum);
+    // sum overlapping elements
+    for(int i = 0; i < smallerSize; i++) {
+        v3.push_back(v1[i] + v2[i]);
     }
 
-
-    if(sizeV1 == sizeV2)
-    {
-        return v3;
-    }
-
-
-    for(int i = smallerSize; i < largerSize; i++)
-    {
-        if(largerSize == sizeV1)
-        {
-            v3.push_back(v1.at(i));
-        }
-        else
-        {
-            v3.push_back(v2.at(i));
-        }
+    // append remaining elements from the longer vector
+    if(sizeV1 > sizeV2) {
+        for(int i = smallerSize; i < largerSize; i++) v3.push_back(v1[i]);
+    } else {
+        for(int i = smallerSize; i < largerSize; i++) v3.push_back(v2[i]);
     }
 
     return v3;
