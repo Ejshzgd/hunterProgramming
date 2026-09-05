@@ -25,4 +25,3 @@ double Shape::perimeter() const {
     return numEdges_ * edgeLength_;
 }
 
-https://tong-yee.github.io/235/fall_2026/exercises/ex1_shape_triangle_square.html

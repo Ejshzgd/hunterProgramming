@@ -1,7 +1,8 @@
 #ifndef TRIANGLE_HPP
 #define TRIANGLE_HPP
 
-class Triangle {
+#include "Shape.hpp"
+class Triangle : public Shape {
 
 public:
     Triangle();
@@ -9,9 +10,6 @@ public:
     Triangle(double edgeLength);
 
     double area() const override;
-
-
-private:
 
 };
 
