@@ -1,6 +1,6 @@
 // File name: MiniVector.tpp  (submit this file, renamed if needed, to Gradescope)
-// Name:
-// Email:
+// Name: Carey Jiang
+// Email: careyj2024@gmail.com
 //
 // CSCI 235 -- Project 1B: MiniVector (template)
 // Hunter College, CUNY | Fall 2026
@@ -25,6 +25,7 @@
 
 #include <stdexcept>
 #include <string>   // std::to_string, for at()'s exception message
+#include "MiniVector.hpp"
 
 // ============================================================
 // Task A -- Construction and destruction
@@ -37,9 +38,9 @@
 // size_ = 0, capacity_ = 2.
 template <typename T>
 MiniVector<T>::MiniVector() {
-  data_ = nullptr;       // placeholder -- replace with `new T[2]{}`
+  data_ = new T[2]{};      
   size_ = 0;
-  capacity_ = 0;          // placeholder -- replace with 2
+  capacity_ = 2;         
 }
 
 // TODO (Task A): Count constructor.
@@ -50,10 +51,15 @@ MiniVector<T>::MiniVector() {
 // do not leave data_ null in this case.
 template <typename T>
 MiniVector<T>::MiniVector(std::size_t count) {
-  (void)count;            // placeholder -- remove once you use count
-  data_ = nullptr;
-  size_ = 0;
-  capacity_ = 0;
+  if(count > 0)
+  {
+    data_ = new T[count]{};
+    size_ = count;
+    capacity_ = count;
+    return;
+  }
+
+  MiniVector();
 }
 
 // TODO (Task A): Destructor.
@@ -62,7 +68,7 @@ MiniVector<T>::MiniVector(std::size_t count) {
 // to stop existing.
 template <typename T>
 MiniVector<T>::~MiniVector() {
-  // TODO
+  delete[] data_;
 }
 
 // ============================================================
@@ -108,8 +114,20 @@ std::size_t MiniVector<T>::capacity() const {
 // capacity_ == 0.) If newCapacity <= capacity_, do nothing.
 template <typename T>
 void MiniVector<T>::reserve(std::size_t newCapacity) {
-  (void)newCapacity;        // placeholder -- remove once you use newCapacity
-  // TODO
+  if(newCapacity > capacity_)
+  {
+    T* newArray = new T[newCapacity]{};
+
+    for(std::size_t i = 0; i < size_; i++)
+    {
+      newArray[i] = data_[i];
+    }
+
+    delete[] data_;
+    data_ = newArray;
+    capacity_ = newCapacity;
+  }
+  
 }
 
 // TODO (Task B): Append element at the end.
@@ -119,8 +137,13 @@ void MiniVector<T>::reserve(std::size_t newCapacity) {
 // write element into data_[size_] and increment size_.
 template <typename T>
 void MiniVector<T>::push_back(T element) {
-  (void)element;            // placeholder -- remove once you use element
-  // TODO
+  if(size_ == capacity_)
+  {
+    reserve(2 * capacity_);
+
+    data_[size_] = element;
+    size_++;
+  }
 }
 
 // ============================================================
@@ -132,14 +155,23 @@ void MiniVector<T>::push_back(T element) {
 // Otherwise, behave exactly like operator[].
 template <typename T>
 T& MiniVector<T>::at(std::size_t pos) {
-  // TODO: bounds check, then `return data_[pos];`
-  return data_[pos];   // placeholder -- currently unchecked, fix this
+  if(pos >= size_)
+  {
+    throw std::out_of_range("Index is out of bounds!");
+  }
+  
+  return data_[pos];
+
 }
 
 template <typename T>
 const T& MiniVector<T>::at(std::size_t pos) const {
-  // TODO: bounds check, then `return data_[pos];`
-  return data_[pos];   // placeholder -- currently unchecked, fix this
+  if(pos >= size_)
+  {
+    throw std::out_of_range("Index is out of bounds!");
+  }
+  
+  return data_[pos];
 }
 
 // TODO (Task C): Remove the last element.
@@ -150,7 +182,11 @@ const T& MiniVector<T>::at(std::size_t pos) const {
 // considered "in use."
 template <typename T>
 void MiniVector<T>::pop_back() {
-  // TODO
+  if(!empty())
+  {
+    data_[size_] = 0;
+    size_--;
+  }
 }
 
 // TODO (Task C): Remove all elements.
@@ -158,7 +194,7 @@ void MiniVector<T>::pop_back() {
 // MiniVector is safe. Do not touch capacity_ or the underlying array.
 template <typename T>
 void MiniVector<T>::clear() {
-  // TODO
+  size_ = 0;
 }
 
 // ============================================================
@@ -171,10 +207,14 @@ void MiniVector<T>::clear() {
 // match other.
 template <typename T>
 MiniVector<T>::MiniVector(const MiniVector& other) {
-  (void)other;             // placeholder -- remove once you use other
-  data_ = nullptr;
-  size_ = 0;
-  capacity_ = 0;
+  data_ = new T[other.capacity_];
+  size_ = other.size_;
+  capacity_ = other.capacity_;
+
+  for(std::size_t i = 0; i < other.size_; ++i )
+  {
+    data_[i] = other.data_[i];
+  }
 }
 
 // TODO (Task D): Copy-assignment operator.
@@ -187,6 +227,22 @@ MiniVector<T>::MiniVector(const MiniVector& other) {
 // 5. Install the new pointer, and update size_/capacity_.
 template <typename T>
 MiniVector<T>& MiniVector<T>::operator=(const MiniVector& other) {
-  (void)other;             // placeholder -- remove once you use other
-  return *this;
+  if(this == &other)
+  {
+    return *this;
+  }
+
+  delete[] data_;
+
+  data_ = new int[other.capacity_];
+  size_ = other.size_;
+  capacity_ = other.capacity_;
+    
+  for(std::size_t i = 0; i < size_; ++i)
+  {
+    data_[i] = other.data_[i];
+  }
+
+    return *this;
+  
 }

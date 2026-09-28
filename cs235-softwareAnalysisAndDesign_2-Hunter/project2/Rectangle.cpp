@@ -54,3 +54,4 @@ void Rectangle::print() const {
   std::cout << "area: " << area() << '\n';
   std::cout << "perimeter: " << perimeter() << "\n\n";
 }
+
