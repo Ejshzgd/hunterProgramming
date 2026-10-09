@@ -71,7 +71,7 @@ std::string LinkedList::toString() const {
 // TODO -- Task A: void LinkedList::prepend(int value)
 // Insert value at the FRONT of the list, in O(1).
 void LinkedList::prepend(int value) {
-    Node* newNode;
+    Node* newNode = new Node;
     newNode->data = value;
     newNode->next = head_;
 
@@ -82,8 +82,8 @@ void LinkedList::prepend(int value) {
 // TODO -- Task B: void LinkedList::append(int value)
 // Insert value at the BACK of the list. Remember the empty list.
 void LinkedList::append(int value) {
-
-    Node* newNode;
+    
+    Node* newNode = new Node;
     newNode->data = value;
     newNode->next = nullptr;
 
@@ -94,7 +94,7 @@ void LinkedList::append(int value) {
     }
 
     Node* tempNode = head_;
-    while(tempNode != nullptr)
+    while(tempNode->next != nullptr)
     {
         tempNode = tempNode->next;
     }
@@ -108,30 +108,33 @@ void LinkedList::append(int value) {
 // pos == size() appends. Return false and change nothing if pos is
 // negative or greater than size().
 bool LinkedList::insertAt(int pos, int value) {
+
     if(pos > size() || pos < 0)
     {
         return false;
     }
 
-    if(pos == size())
+    if(pos == 0)
     {
-        append(value);
+        prepend(value);
         return true;
     }
 
-    Node* tempNode;
-    int counter = 0;
+    Node* tempNode = head_;
+    int counter = 1;
 
     while(counter < pos)
     {
-        tempNode = head_->next;
+        tempNode = tempNode->next;
         counter++;
     }
 
-    Node* newNode;
+    Node* newNode = new Node;
     newNode->data = value;
     newNode->next = tempNode->next;
-    tempNode->next = tempNode;
+    tempNode->next = newNode;
+    size();
+
     return true;
 
 }
@@ -141,17 +144,49 @@ bool LinkedList::insertAt(int pos, int value) {
 // false if the value is not in the list.
 bool LinkedList::removeValue(int target) {
 
-    Node* preNode = head_;
-
-    while(preNode->next->data != target )
-    {
-        preNode = head
+     if (head_ == nullptr) {
+        return false;
     }
+    
+
+    if (head_->data == target) {
+        Node* targetNode = head_;
+        head_ = head_->next;
+        delete targetNode; 
+        return true;
+    }
+    
+
+    Node* preNode = head_;
+    while (preNode->next != nullptr) {
+        if (preNode->next->data == target) {
+            Node* targetNode = preNode->next;
+            preNode->next = targetNode->next;
+            delete targetNode; 
+            return true;
+        }
+        preNode = preNode->next;
+    }
+    
+    return false;
 }
 
 // TODO -- Task E: void LinkedList::reverse()
 // Reverse the list IN PLACE -- no new nodes, no deleted nodes.
 void LinkedList::reverse() {
+    Node* prev = nullptr;
+    Node* curr = head_;
+    Node* nextNode = nullptr;
+
+    while(curr != nullptr)
+    {
+        nextNode = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nextNode;
+    }
+
+    head_ = prev; 
 }
 
 // TODO -- Task F (optional, not graded): bool LinkedList::removeAt(int pos)

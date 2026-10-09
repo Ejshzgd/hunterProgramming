@@ -51,8 +51,15 @@ std::string Stack::toString() const {
 // Always returns true. (A linked stack cannot be full; push returns bool only
 // so that this class and an array-based stack share one interface.)
 bool Stack::push(int value) {
-    // TODO: your code here
-    return false;
+    Node* newNode = new Node;
+
+    newNode->data = value;
+    newNode->next = head_;
+    head_ = newNode;
+
+    size_++;
+
+    return true;
 }
 
 // ================================================================== Task B
@@ -62,8 +69,8 @@ bool Stack::push(int value) {
 // past it, and only THEN delete the saved address -- reading head_->next
 // after the delete is reading freed memory.
 bool Stack::pop() {
-    // TODO: your code here
-    return false;
+    Node* newNode = head_;
+    
 }
 
 // top(): return the top item WITHOUT removing it.
