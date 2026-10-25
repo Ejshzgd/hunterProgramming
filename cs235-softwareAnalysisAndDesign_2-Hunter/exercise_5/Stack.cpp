@@ -69,8 +69,19 @@ bool Stack::push(int value) {
 // past it, and only THEN delete the saved address -- reading head_->next
 // after the delete is reading freed memory.
 bool Stack::pop() {
+    if(empty())
+    {
+        return false;
+    }
+
     Node* newNode = head_;
     
+    head_ = head_->next;
+
+    delete newNode;
+    size_--;
+
+    return true;
 }
 
 // top(): return the top item WITHOUT removing it.
@@ -78,8 +89,7 @@ bool Stack::pop() {
 // PRECONDITION: the stack is not empty. The caller checks empty() first; the
 // tests never call top() on an empty stack.
 int Stack::top() const {
-    // TODO: your code here
-    return 0;
+    return head_->data;
 }
 
 // ================================================================== Task E
@@ -95,6 +105,30 @@ int Stack::top() const {
 //
 // Careful: check empty() BEFORE calling top(). top() has a precondition.
 bool balanced(const std::string& text) {
-    // TODO: your code here
-    return false;
+    Stack s;
+
+    for(int i = 0; i < text.length(); i++)
+    {
+        if(text.at(i) == '{' || text.at(i) == '(' || text.at(i) == '[')
+        {
+            s.push(text.at(i));
+        }
+        
+        if(text.at(i) == '}' || text.at(i) == ')' || text.at(i) == ']')
+        {
+            if(s.empty())
+            {
+                return false;
+            }
+
+            if((s.top() == '{' && text.at(i) != '}') || (s.top() == '[' && text.at(i) != ']') || (s.top() == '(' && text.at(i) != ')'))
+            {
+                return false;
+            }
+
+            s.pop();
+        }
+    }
+
+    return s.empty();
 }

@@ -1,6 +1,6 @@
 //File name: MiniVectorTest.cpp, template version
-//name:
-//email:
+// Name: Carey Jiang
+// Email: careyj2024@gmail.com
 
 // command to compile:
 // g++ -std=c++17 -Wall -Wextra -pedantic MiniVectorTest.cpp Rectangle.cpp -o MiniVectorTest

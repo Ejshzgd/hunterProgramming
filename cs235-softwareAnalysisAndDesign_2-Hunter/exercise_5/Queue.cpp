@@ -60,8 +60,26 @@ std::string Queue::toString() const {
 // points at itself. The old queue is still reachable from front_, but it
 // is no longer connected to back_.
 bool Queue::enqueue(int value) {
-    // TODO: your code here
-    return false;
+
+    Node* newNode = new Node;
+    newNode->data = value;
+
+    if(empty())
+    {
+        newNode->next = nullptr;
+        front_ = newNode;
+        back_ = newNode;
+        size_++;
+        return true;
+    }
+
+    newNode->next = nullptr;
+    back_->next = newNode;
+    back_ = newNode;
+
+    size_++;
+    return true;
+
 }
 
 // ================================================================== Task D
@@ -76,16 +94,30 @@ bool Queue::enqueue(int value) {
 // empty() will look correct -- it checks front_ -- and the next enqueue()
 // will write through back_ into freed memory. Valgrind catches it here.
 bool Queue::dequeue() {
-    // TODO: your code here
-    return false;
+    if(empty())
+    {
+        return false;
+    }
+
+    Node* newNode = front_;
+    front_ = front_->next;
+
+    delete newNode;
+
+    if(empty())
+    {
+        back_ = nullptr;
+    }
+
+    size_--;
+    return true;
 }
 
 // front(): return the front item WITHOUT removing it.
 //
 // PRECONDITION: the queue is not empty.
 int Queue::front() const {
-    // TODO: your code here
-    return 0;
+    return front_->data;
 }
 
 // ================================================================== Task F
