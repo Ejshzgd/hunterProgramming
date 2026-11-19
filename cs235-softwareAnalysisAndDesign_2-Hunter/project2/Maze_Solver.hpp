@@ -3,6 +3,7 @@
 #define MAZE_SOLVER_HPP
 #include <vector>
 #include <stack>
+#include<queue>
 #include <string>
 
 struct Coord {
