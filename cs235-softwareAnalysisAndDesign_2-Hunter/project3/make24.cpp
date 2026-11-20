@@ -1,6 +1,6 @@
 // File name: make24.cpp  (rename this file to make24.cpp before submitting)
-// Name:
-// Email:
+// Name: Carey Jiang
+// Email: carey.jiang65@login.cuny.edu
 //
 // P3 — Make 24, Task A: Boolean Solver
 //
@@ -109,9 +109,80 @@ int main() {
 // │  Remember: after removing j, cloneVec has size - 1 elements, so its  │
 // │  last valid index is size - 2 -- not size - 1.                       │
 // └─────────────────────────────────────────────────────────────────────┘
+//Must use all the nums
 bool make24(std::vector<double> numsVec) {
-  // TODO
-  return false;  // placeholder -- remove this line when you implement the above
+  if (numsVec.size() == 1)
+  {
+    return (std::fabs(numsVec[0] - GOAL) <= DELTA);
+  }
+  
+  for(int i = 0; i < numsVec.size(); i++)
+  {
+    for(int j = i+1; j < numsVec.size(); j++)
+    {
+      double add = numsVec[i] + numsVec[j];
+      double multiply = numsVec[i] * numsVec[j];
+
+      double subtract_LR = numsVec[i] - numsVec[j];
+      double subtract_RL = numsVec[j] - numsVec[i];
+      double divide_LR;
+      bool validLR = numsVec[j] != 0.0;
+      double divide_RL;
+      bool validRL = numsVec[i] != 0.0;
+      if(numsVec[i] != 0.0 && numsVec[j] != 0.0)
+      {
+        divide_LR = numsVec[i] / numsVec[j];
+        divide_RL = numsVec[j] / numsVec[i];
+      }
+      else if(numsVec[i] == 0.0)
+      {
+        divide_LR = 0.0;
+      }
+      else
+      {
+        divide_RL = 0.0;
+      }
+
+      std::vector<double> original = numsVec;
+      std::swap(numsVec[j] , numsVec.back());
+      numsVec.pop_back();
+      std::swap(numsVec[i] , numsVec.back());
+      numsVec.pop_back();
+
+      std::vector<double> p1 = numsVec, p2 = numsVec, p3 = numsVec,
+                    p4 = numsVec, p5 = numsVec;
+      p1.push_back(add);
+      p2.push_back(subtract_LR);
+      p3.push_back(subtract_RL);
+      p4.push_back(multiply);
+      if(validLR && validRL)
+      {
+        std::vector<double> p6 = numsVec;
+        p5.push_back(divide_LR);
+        p6.push_back(divide_RL);
+        if(make24(p6))
+        {
+          return true;
+        }
+      }
+      else if(validLR)
+      {
+        p5.push_back(divide_LR);
+      }
+      else
+      {
+        p5.push_back(divide_RL);
+      }
+
+      if(make24(p1) || make24(p2) || make24(p3) || make24(p4) || make24(p5))
+      {
+        return true;
+      }
+      numsVec = original;
+    }
+  }
+
+    return false;
 }
 
 // ── IMPLEMENT arithmetic() BELOW ──────────────────────────────────────────
@@ -133,8 +204,40 @@ bool make24(std::vector<double> numsVec) {
 // A call with two ordinary nonzero operands should return six values, in
 // this order: num+num2, num-num2, num2-num, num*num2, num/num2, num2/num.
 std::vector<double> arithmetic(double num, double num2) {
-  // TODO
-  return {};  // placeholder -- remove this line when you implement the above
+    std::vector<double> v;
+
+    double add = num+num2;
+    v.push_back(add);
+
+    double subtract1 = num-num2;
+    v.push_back(subtract1);
+    double subtract2 = num2-num;
+    v.push_back(subtract2);
+
+    double multiply = num*num2;
+    v.push_back(multiply);
+
+    double divideLR;
+    double divideRL;
+    if(num != 0.0 && num2 != 0.0)
+    {
+      divideLR = num/num2;
+      v.push_back(divideLR);
+      divideRL = num2/num;
+      v.push_back(divideRL);
+    }
+    else if(num == 0.0 && num2 != 0.0)
+    {
+      divideLR = 0.0;
+      v.push_back(divideLR);
+    }
+    else if(num != 0.0 && num2 == 0.0)
+    {
+      divideRL = 0.0;
+      v.push_back(divideRL);
+    }
+
+    return v;
 }
 
 // Prints the elements of numsVec on one line, space-separated. Handy for

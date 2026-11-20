@@ -1,6 +1,6 @@
 // File name: make24.cpp  (rename this file to make24.cpp before submitting)
-// Name:
-// Email:
+// Name: Carey Jiang
+// Email: carey.jiang65@login.cuny.edu
 //
 // P3 — Make 24, Task B: Single-Expression Solver
 //
@@ -50,10 +50,10 @@ struct Expression_Value {
 
 // A non-empty return value is one valid solution expression.
 // An empty string "" means that no solution exists.
-std::string make24(std::vector<double> numsVec);
+std::string make24(std::vector<double> ev_vec);
 std::string make24(std::vector<Expression_Value> ev_vec);
 std::vector<Expression_Value> arithmetic(Expression_Value ev1, Expression_Value ev2);
-void print(const std::vector<double>& numsVec);
+void print(const std::vector<double>& ev_vec);
 
 // ── Helper for main() ─────────────────────────────────────────────────────
 static void print_result(int passed, int total) {
@@ -119,19 +119,25 @@ int main() {
 // ════════════════════════════════════════════════════════════════════════
 //
 // This overload is the entry point the autograder calls. It should do very
-// little: convert each number in numsVec into a "trivial" Expression_Value
+// little: convert each number in ev_vec into a "trivial" Expression_Value
 // (its expression is just its own literal value as a string; its value is
 // itself), collect those into a vector, and delegate to the
 // make24(vector<Expression_Value>) overload below.
 //
-// You may assume every entry of numsVec is an integer value (as always in
-// this project) and that numsVec contains at least one number.
+// You may assume every entry of ev_vec is an integer value (as always in
+// this project) and that ev_vec contains at least one number.
 //
 // Hint: std::to_string(static_cast<int>(x)) turns a whole-number double x
 // into the text you want for its starting expression.
-std::string make24(std::vector<double> numsVec) {
-  // TODO
-  return "";  // placeholder -- remove this line when you implement the above
+std::string make24(std::vector<double> ev_vec) {
+  std::vector<Expression_Value> ev;
+  for(int i = 0; i < ev_vec.size(); i++)
+  {
+    Expression_Value e = {std::to_string(static_cast<int>(ev_vec[i])) , ev_vec[i]};
+    ev.push_back(e);
+  }
+
+  return make24(ev);
 }
 
 // ════════════════════════════════════════════════════════════════════════
@@ -154,7 +160,7 @@ std::string make24(std::vector<double> numsVec) {
 // Recursive case (size >= 2):
 //   Consider every pair of positions (i, j) with i < j. For each pair,
 //   arithmetic() (also below -- its own TODO) gives every way of combining
-//   ev_vec[i] and ev_vec[j] into a single Expression_Value. For each
+//   ev_vec[i].value and ev_vec[j] into a single Expression_Value. For each
 //   candidate, build a smaller hand by removing positions i and j and
 //   appending the candidate, then recurse on that smaller hand. As soon as
 //   any pair, any candidate, and the recursive call on the resulting hand
@@ -176,8 +182,106 @@ std::string make24(std::vector<double> numsVec) {
 // │  last valid index is size - 2 -- not size - 1.                       │
 // └─────────────────────────────────────────────────────────────────────┘
 std::string make24(std::vector<Expression_Value> ev_vec) {
-  // TODO
-  return "";  // placeholder -- remove this line when you implement the above
+    if(ev_vec.size() == 1 && (std::fabs(ev_vec[0].value - GOAL) <= DELTA))
+    {
+      return ev_vec[0].expression;
+    }
+
+  for(int i = 0; i < ev_vec.size(); i++)
+  {
+    for(int j = i+1; j < ev_vec.size(); j++)
+    {
+      double add = ev_vec[i].value + ev_vec[j].value;
+      std::string addStr = "(" + std::to_string(static_cast<int>(ev_vec[i].value))  + "+" + std::to_string(static_cast<int>(ev_vec[j].value)) + ")";
+      Expression_Value addEV = {addStr,add};
+
+
+      double multiply = ev_vec[i].value * ev_vec[j].value;
+      std::string multiplyStr = "(" + std::to_string(static_cast<int>(ev_vec[i].value))  + "*" + std::to_string(static_cast<int>(ev_vec[j].value)) + ")";
+      Expression_Value multiplyEV = {multiplyStr,multiply};
+
+      double subtract_LR = ev_vec[i].value - ev_vec[j].value;
+      std::string subtract_LR_Str = "(" + std::to_string(static_cast<int>(ev_vec[i].value))  + "-" + std::to_string(static_cast<int>(ev_vec[j].value)) + ")";
+      Expression_Value subtract_LR_EV = {subtract_LR_Str,subtract_LR};
+
+      double subtract_RL = ev_vec[j].value - ev_vec[i].value;
+      std::string subtract_RL_Str = "(" + std::to_string(static_cast<int>(ev_vec[j].value))  + "-" + std::to_string(static_cast<int>(ev_vec[i].value)) + ")";
+      Expression_Value subtract_RL_EV = {subtract_RL_Str,subtract_RL};
+
+
+      double divide_LR;
+      Expression_Value divide_LR_EV;
+      bool validLR = ev_vec[j].value != 0.0;
+      double divide_RL;
+      Expression_Value divide_RL_EV;
+      bool validRL = ev_vec[i].value != 0.0;
+      if(ev_vec[i].value != 0.0 && ev_vec[j].value != 0.0)
+      {
+        divide_LR = ev_vec[i].value / ev_vec[j].value;
+        std::string divide_LR_Str = "(" + std::to_string(static_cast<int>(ev_vec[i].value))  + "/" + std::to_string(static_cast<int>(ev_vec[j].value)) + ")";
+        divide_LR_EV = {divide_LR_Str,divide_LR};
+
+        divide_RL = ev_vec[j].value / ev_vec[i].value;
+        std::string divide_RL_Str = "(" + std::to_string(static_cast<int>(ev_vec[j].value))  + "/" + std::to_string(static_cast<int>(ev_vec[i].value)) + ")";
+        divide_RL_EV = {divide_RL_Str,divide_RL};
+      }
+      else if(ev_vec[i].value == 0.0)
+      {
+        divide_LR = 0.0;
+        std::string divide_LR_Str = "(" + std::to_string(static_cast<int>(ev_vec[i].value))  + "/" + std::to_string(static_cast<int>(ev_vec[j].value)) + ")";
+        divide_LR_EV = {divide_LR_Str,divide_LR};
+      }
+      else
+      {
+        divide_RL = 0.0;
+        std::string divide_RL_Str = "(" + std::to_string(static_cast<int>(ev_vec[j].value))  + "/" + std::to_string(static_cast<int>(ev_vec[i].value)) + ")";
+        divide_RL_EV = {divide_RL_Str,divide_RL};
+      }
+
+
+      std::vector<Expression_Value> original = ev_vec;
+      std::swap(ev_vec[j] , ev_vec.back());
+      ev_vec.pop_back();
+      std::swap(ev_vec[i] , ev_vec.back());
+      ev_vec.pop_back();
+
+      std::vector<Expression_Value> p1 = ev_vec, p2 = ev_vec, p3 = ev_vec,
+                    p4 = ev_vec, p5 = ev_vec;
+      p1.push_back(addEV);
+      p2.push_back(subtract_LR_EV);
+      p3.push_back(subtract_RL_EV);
+      p4.push_back(multiplyEV);
+      if(validLR && validRL)
+      {
+        std::vector<Expression_Value> p6 = ev_vec;
+        p5.push_back(divide_LR_EV);
+        p6.push_back(divide_RL_EV);
+
+        std::string result = make24(p6);
+      if(make24(p6) != "")
+      {
+        return result;
+      }
+      }
+      else if(validLR)
+      {
+        p5.push_back(divide_LR_EV);
+      }
+      else
+      {
+        p5.push_back(divide_RL_EV);
+      }
+
+      if(make24(p1) || make24(p2) || make24(p3) || make24(p4) || make24(p5))
+      {
+        return true;
+      }
+      ev_vec = original;
+    }
+  }
+
+    return "";
+    
 }
 
 // ── IMPLEMENT arithmetic() BELOW ──────────────────────────────────────────
@@ -208,11 +312,11 @@ std::vector<Expression_Value> arithmetic(Expression_Value ev1, Expression_Value 
   return {};  // placeholder -- remove this line when you implement the above
 }
 
-// Prints the elements of numsVec on one line, space-separated. Handy for
+// Prints the elements of ev_vec on one line, space-separated. Handy for
 // tracing your own recursion while debugging; not used by main().
-void print(const std::vector<double>& numsVec) {
-  for (int i = 0; i < static_cast<int>(numsVec.size()); ++i) {
-    std::cout << numsVec[i] << " ";
+void print(const std::vector<double>& ev_vec) {
+  for (int i = 0; i < static_cast<int>(ev_vec.size()); ++i) {
+    std::cout << ev_vec[i].value << " ";
   }
   std::cout << std::endl;
 }
